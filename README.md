@@ -5,6 +5,7 @@ Um microserviço em Python que atua como proxy para a API de notícias do [MeuPS
 ## ✨ Funcionalidades
 
 - Expõe um endpoint HTTP `/noticias` que retorna as notícias do MeuPS em formato JSON.
+- Expõe um endpoint HTTP `/noticia_html` que retorna o HTML bruto de uma notícia específica.
 - Permite paginação e ajuste do número de notícias por requisição.
 - Contorna bloqueios do Cloudflare usando a biblioteca `cloudscraper`.
 - Fácil de rodar via Docker e Docker Compose.
@@ -28,7 +29,7 @@ Certifique-se de que os arquivos `srv.py`, `Dockerfile` e `docker-compose.yml` e
 docker-compose up --build -d
 ```
 
-O serviço estará disponível em `http://localhost:5000/noticias`.
+O serviço estará disponível em `http://localhost:5000`.
 
 ### 4. Exemplos de uso
 
@@ -44,7 +45,13 @@ GET http://localhost:5000/noticias
 GET http://localhost:5000/noticias?page=2&per_page=50
 ```
 
-#### Resposta esperada:
+#### Obter o HTML bruto de uma notícia:
+
+```
+GET http://localhost:5000/noticia_html?url=https://meups.com.br/noticias/monster-hunter-rise-sunbreak-10-mi-copias/
+```
+
+#### Resposta esperada para `/noticias`:
 
 ```json
 [
@@ -58,6 +65,10 @@ GET http://localhost:5000/noticias?page=2&per_page=50
   ...
 ]
 ```
+
+#### Resposta esperada para `/noticia_html`:
+
+O HTML bruto da página da notícia, igual ao que seria carregado no navegador.
 
 ## 🛠️ Stack utilizada
 
@@ -83,6 +94,7 @@ Basta usar o node HTTP Request do n8n apontando para o endpoint do serviço, por
 
 ```
 GET http://localhost:5000/noticias?page=1&per_page=20
+GET http://localhost:5000/noticia_html?url=https://meups.com.br/noticias/monster-hunter-rise-sunbreak-10-mi-copias/
 ```
 
 ## ⚠️ Avisos

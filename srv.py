@@ -16,5 +16,17 @@ def noticias():
         return jsonify({"error": "Erro ao obter dados"}), 500
     return jsonify(data)
 
+@app.route('/noticia_html', methods=['GET'])
+def noticia_html():
+    url = request.args.get('url')
+    if not url or not url.startswith("https://meups.com.br/"):
+        return {"error": "URL inválida"}, 400
+    scraper = cloudscraper.create_scraper()
+    resp = scraper.get(url)
+    if resp.status_code != 200:
+        return {"error": "Não foi possível acessar a notícia"}, 500
+    # Retorna o HTML bruto, com o content-type correto
+    return Response(resp.text, content_type=resp.headers.get('Content-Type', 'text/html'))
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
